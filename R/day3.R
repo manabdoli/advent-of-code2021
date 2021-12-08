@@ -1,5 +1,5 @@
 # day 3
-x <- read.table(file='input', header = FALSE,
+x <- read.table(file='data/day3/input', header = FALSE,
                 as.is = TRUE, colClasses = 'character')
 x <- x$V1
 n <- nchar(x)

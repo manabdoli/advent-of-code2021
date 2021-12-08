@@ -1,8 +1,8 @@
 # day 5
 ## Test ####
-source('l.seg.R')
+source('R/l.seg.R')
 x <- read.table(header = FALSE, stringsAsFactors = FALSE,
-  file = 'input'
+  file = 'data/day5/input'
 )
 frm <- do.call(rbind, sapply(strsplit(x$V1, split = ','), as.integer, simplify = F))
 to <- do.call(rbind, sapply(strsplit(x$V3, split = ','), as.integer, simplify = F))
@@ -67,3 +67,4 @@ for(i in 1:length(segs)){
 #xy.map
 
 sum(xy.map>=2)
+
