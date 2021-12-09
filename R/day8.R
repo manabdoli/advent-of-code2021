@@ -1,14 +1,7 @@
 # day 8
-x <- readLines(con = file('data/day8/input'))
-
-xy <- strsplit(x, split=' | ', fixed=TRUE)
-puzzle <- lapply(xy, function(aCase){
-  list(
-    learn = strsplit(aCase[1], split = ' ')[[1]],
-    solve = strsplit(aCase[2], split = ' ')[[1]]
-  )
-}
-)
+inputFile <- file('data/day8/input')
+x <- readLines(con = inputFile)
+close(inputFile)
 
 # 7-segment characteristics
 segs <- function(digit, invert=FALSE){
@@ -49,16 +42,27 @@ e    f
 
 #print7seg(9)
 
+if(FALSE){
+  # Used to figure the rules out
+  segDF <- data.frame(digits=0:9, segs=sapply(0:9, segs),
+                      len=nchar(sapply(0:9, segs)))
+  segDF$is.uniq <- sapply(0:9,
+                          function(k) sum(segDF$len[k+1]==segDF$len)==1)
+  uniq.lens <- segDF$len[segDF$is.uniq]
+  xy <- strsplit(x, split=' | ', fixed=TRUE)
+  puzzle <- lapply(xy, function(aCase){
+    list(
+      learn = strsplit(aCase[1], split = ' ')[[1]],
+      solve = strsplit(aCase[2], split = ' ')[[1]]
+    )
+  }
+  )
 
-segDF <- data.frame(digits=0:9, segs=sapply(0:9, segs),
-                    len=nchar(sapply(0:9, segs)))
-segDF$is.uniq <- sapply(0:9,
-                        function(k) sum(segDF$len[k+1]==segDF$len)==1)
-uniq.lens <- segDF$len[segDF$is.uniq]
-uniq.count <- sapply(puzzle, function(l){
-  sum(sapply(l$solve, function(ges) nchar(ges)%in%uniq.lens))
-})
-sum(uniq.count)
+  uniq.count <- sapply(puzzle, function(l){
+    sum(sapply(l$solve, function(ges) nchar(ges)%in%uniq.lens))
+  })
+  sum(uniq.count)
+}
 
 
 # Part II ####
