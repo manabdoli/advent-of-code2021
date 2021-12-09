@@ -161,7 +161,6 @@ idx2arr1 <- function(idx, n=7){
 }
 #idx2arr1(c(1,3,7))
 
-U=toupper(puzzle[[1]]$learn)
 # Cracking the transition from signal to segment
 crack <- function(signals){
   # extract counts used in rules
@@ -253,7 +252,7 @@ crack <- function(signals){
   # return the transition
   sig.seg.mat
 }
-
+#
 signals2digits <- function(signals){
   # Find signals to segment transition
   sig.seg.mat <- crack(signals)
@@ -262,13 +261,45 @@ signals2digits <- function(signals){
     sapply(toupper(signals), # do this for all terms
            function(sig){
              paste0( # join the segments
-               sapply(term2idx(sig), # for all signals
-                    function(j){ # find the transition to segment
-                      letters[which(sig.seg.mat[j,]==1)]
-                    }),
+               sort( # to get the correct order
+                 sapply(term2idx(sig), # for all signals
+                        function(j){ # find the transition to segment
+                          letters[which(sig.seg.mat[j,]==1)]
+                        })
+               ),
                collapse = '')
            })
   # find signal to digits using segments
-  sig2dig <-sapply(sig2seg, function(seg) seg2dig[seg])
+  sapply(sig2seg, function(seg) seg2dig[[seg]])
 }
 
+sig2num <- function(keyCode){
+  # separate key and code
+  key.code <- strsplit(keyCode, split=' | ', fixed=TRUE)[[1]]
+  # separate keys
+  key = strsplit(key.code[1], split = ' ')[[1]]
+  # separate codes
+  code = strsplit(key.code[2], split = ' ')[[1]]
+  # find transition between signals and segments using keys
+  sig.seg.mat <- crack(key)
+  # find segments that each code is iluminating
+  # Find signals to segments
+  code2seg <-
+    sapply(toupper(code), # do this for all terms
+           function(sig){
+             paste0( # join the segments
+               sort( # to get the correct order
+                 sapply(term2idx(sig), # for all signals
+                        function(j){ # find the transition to segment
+                          letters[which(sig.seg.mat[j,]==1)]
+                        })
+               ),
+               collapse = '')
+           })
+
+  paste0(
+    sapply(code2seg, function(sig) seg2dig[[sig]]),
+    collapse = '')
+}
+
+sum(as.numeric(sapply(x, sig2num)))
