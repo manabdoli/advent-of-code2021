@@ -1,5 +1,5 @@
 # day 2
-x <- read.table(file='data/day2/input.txt', header = FALSE, as.is = TRUE)
+x <- read.table(file='data/day02/input.txt', header = FALSE, as.is = TRUE)
 pos <- c(0,0)
 #
 for(i in 1:dim(x)[1]){

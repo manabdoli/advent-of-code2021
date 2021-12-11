@@ -1,5 +1,5 @@
 # day 6 test
-y <- readLines(con = file('data/day6/input'))
+y <- readLines(con = file('data/day06/input'))
 x <- eval(expr = parse(text = paste0('c(', y, ')')))
 idx0 <- which(x==0)
 for(i in 1:80){

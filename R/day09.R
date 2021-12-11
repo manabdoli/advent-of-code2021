@@ -1,5 +1,5 @@
 # R9
-inputFile <- file('data/day9/input')
+inputFile <- file('data/day09/input')
 x <- readLines(con = inputFile)
 close(inputFile)
 

@@ -1,5 +1,5 @@
 # Advent of Code:
-x <- read.table(file = 'data/day1/input')
+x <- read.table(file = 'data/day01/input')
 #1
 sum(diff(x)>0)
 #2

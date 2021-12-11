@@ -1,5 +1,5 @@
 # Read inout data
-xtxt <- readLines(con = file('data/day7/input.txt'))
+xtxt <- readLines(con = file('data/day07/input.txt'))
 x <- eval(parse(text = paste0('c(', xtxt, ')')))
 # The answer is median
 (x.med <- median(x))

@@ -1,7 +1,7 @@
 # day 4
-draw <- read.csv(file = 'data/day4/input', header = FALSE, as.is = TRUE, colClasses = 'integer', nrows = 1)
+draw <- read.csv(file = 'data/day04/input', header = FALSE, as.is = TRUE, colClasses = 'integer', nrows = 1)
 draw <- as.numeric(draw)
-x <- read.table(file = 'data/day4/input', skip = 1, colClasses = 'integer')
+x <- read.table(file = 'data/day04/input', skip = 1, colClasses = 'integer')
 boards <- as.matrix(x)
 
 range(draw)

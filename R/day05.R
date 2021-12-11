@@ -2,7 +2,7 @@
 ## Test ####
 source('R/l.seg.R')
 x <- read.table(header = FALSE, stringsAsFactors = FALSE,
-  file = 'data/day5/input'
+  file = 'data/day05/input'
 )
 frm <- do.call(rbind, sapply(strsplit(x$V1, split = ','), as.integer, simplify = F))
 to <- do.call(rbind, sapply(strsplit(x$V3, split = ','), as.integer, simplify = F))
