@@ -3,7 +3,7 @@
 # connectivity graph any ay time (where 1 represents a possible transition from
 # a row to a column.)
 # I also decided to use a stacked list (stack of list objects) to track the
-# possible pathes. The process would be a recursive process, where the list
+# possible paths. The process would be a recursive process, where the list
 # grows at each step and the matrix's 1 shrinks.
 #   (I am assuming that the graph is eventually skips cycles like A-B-A-B-...)
 #

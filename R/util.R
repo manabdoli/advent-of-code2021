@@ -10,6 +10,7 @@ readfilelines <- function(filename){
   x
 }
 
+
 txt2digits <- function(x){
   xmat <- do.call(
     rbind,
