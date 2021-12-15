@@ -75,3 +75,11 @@ with(elem.counts, Freq[which.max(Freq)]-Freq[which.min(Freq)])
 #                NBBBCNCCNBBNBNBBCHBHHBCHB
 ## After step 4: NBBNBNBBCCNBCNCCNBBNBBNBBBNBBNBBCBHCBHHNHCBBCBHCB
 #                NBBNBNBBCCNBCNCCNBBNBBNBBBNBBNBBCBHCBHHNHCBBCBHCB
+
+curstr <- params$startstr
+for(i in 1:40){
+  curstr <- oneinsert(curstr, params$rules)
+}
+elems <- strsplit(curstr, split = '')[[1]]
+elem.counts <- as.data.frame(table(elems))
+print(with(elem.counts, Freq[which.max(Freq)]-Freq[which.min(Freq)]))
