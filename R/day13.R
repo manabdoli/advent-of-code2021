@@ -1,6 +1,7 @@
 #day 13
 source('R/util.R')
 x <- readfilelines('data/day13/input')
+
 day13setup <- function(x){
   sepline <- which(x=='')
   instr <- do.call(
@@ -16,7 +17,9 @@ day13setup <- function(x){
 }
 
 #print sheet
-printsecret <- function(secret, rc=c(max(secret[,1]), max(secret[,2]))){
+printsecret <- function(secret, rc=attr(secret, 'rc')){
+  if(is.null(rc))
+    rc <- c(max(secret[,1]), max(secret[,2]))
   prtstr <- matrix('.', nrow=rc[1]+1, ncol=rc[2]+1)
   prtstr[secret+1] <- '#'
   cat(apply(prtstr, 2, paste0, collapse = ''), sep='\n')
@@ -26,27 +29,46 @@ printsecret <- function(secret, rc=c(max(secret[,1]), max(secret[,2]))){
 fold <- function(secret, instr, rc=c(max(secret[,1]), max(secret[,2]))){
   if(instr$xy=='x'){
     xidx <- which(secret[,1]>instr$val)
-    secret1 <- cbind(rc[1]-secret[xidx,1], secret[xidx,2])
-    secret <- unique(rbind(secret[-xidx,], secret1))
+    secret1=NULL
+    if(length(xidx)>0){
+      secret1 <- cbind(instr$val*2-secret[xidx,1], secret[xidx,2])
+      secret <- unique(rbind(secret[-xidx,], secret1))
+    }
     rmidx <- which(secret[,1]==instr$val)
     if(length(rmidx)>0)
       secret <- secret[-rmidx, ]
-    newrc <- c(instr$val-1, rc[2])
+    # shift all to zero
+    if(min(secret[,1])<0)
+      secret[,1] <- secret[, 1]-min(secret[,1])
+    newrc <- c(max(rc[1]-instr$val-1, instr$val-1), rc[2])
   } else{
     yidx <- which(secret[,2]>instr$val)
-    secret1 <- cbind(secret[yidx,1], rc[2]-secret[yidx,2])
-    secret <- unique(rbind(secret[-yidx,], secret1))
+    secret1=NULL
+    if(length(yidx)>0){
+      secret1 <- cbind(secret[yidx,1], instr$val*2-secret[yidx,2])
+      secret <- unique(rbind(secret[-yidx,], secret1))
+    }
     rmidx <- which(secret[,2]==instr$val)
     if(length(rmidx)>0)
       secret <- secret[-rmidx, ]
-    newrc <- c(rc[1], instr$val-1)
+    # shift all to zero
+    if(min(secret[,2])<0)
+      secret[,2] <- secret[, 2]-min(secret[,2])
+    newrc <- c(rc[1], max(rc[2]-instr$val-1, instr$val-1))
   }
   structure(secret, rc=newrc)
 }
 #
+#
 params <- day13setup(x)
 
+# full_rc <- c(params$instr[which(params$instr$xy=='x')[1],2],
+#         params$instr[which(params$instr$xy=='y')[1],2])*2+1
+#
+# cursecret <- structure(params$secret,
+#                       rc=full_rc)
 cursecret <- params$secret
+
 for(i in 1:dim(params$instr)[1]){
   cursecret <- fold(cursecret, params$instr[i,], attr(cursecret, 'rc'))
   if(i==1)
