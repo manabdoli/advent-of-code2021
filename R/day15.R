@@ -11,10 +11,12 @@ riskMat <- do.call(rbind,
                    lapply(1:length(x),
                           function(r)
                             as.integer(strsplit(x[r], split = '')[[1]])))
-
+riskMat <- riskMat[1:50, 1:50]
+nm <- dim(riskMat)
 # Recursive approach
 bestFound <- list(path=matrix(c(1,1), nrow=1, dimnames = list(NULL, c('x', 'y'))),
-                  maxRisk = sum(riskMat))
+                  maxRisk = min(sum(riskMat[1,], riskMat[,nm[2]]),
+                                sum(riskMat[,1], riskMat[nm[1],])))
 trackFound <-stackobj()
 initSearch <- riskMat*0-1
 initSearch[1,1] <- 0
@@ -29,7 +31,7 @@ adjcells <- function(xy) adjmatidx(xy[1], xy[2],
 # Starting search
 search.mat <- initSearch
 xy <- initPath
-cur.step <- 1
+numSol <- 0
 cum.risk <- sum(riskMat)
 searchStack <- stackobj(list(
   list(xy = xy, cur.step=1, cum.risk=0, proccessed = FALSE)
@@ -39,6 +41,9 @@ cur.path <- NULL
 while(searchStack$len()>0){
   # current node
   cur_node <- searchStack$pop()
+  cat(sprintf('Solutions found %2d, Max Risk = %6d, Step: %5d at (%2d, %2d)\n',
+              numSol, bestFound$maxRisk, cur_node$cur.step, cur_node$xy[1],
+              cur_node$xy[2]))
   curidx <- cur_node$xy
   if(cur_node$proccessed){
     # reset the search and go 1 step backward
@@ -50,6 +55,7 @@ while(searchStack$len()>0){
     # if it is the last node
     if(curidx[1]==nrow(riskMat) & curidx[2]==ncol(riskMat)){
       # update the search
+      numSol <- numSol + 1
       trackFound$push(list(path=cur.path, cum.risk=cur_node$cum.risk))
       if(cur_node$cum.risk<bestFound$maxRisk){
         bestFound$path <- cur.path
