@@ -1,4 +1,5 @@
 # day15test
+t0 <- proc.time()
 source('R/util.R')
 
 x <- readfilelines('data/day15/input')
@@ -95,3 +96,4 @@ while(searchStack$len()>0){
   }
 }
 
+proc.time()-t0
