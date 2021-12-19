@@ -11,7 +11,7 @@ riskMat <- do.call(rbind,
                    lapply(1:length(x),
                           function(r)
                             as.integer(strsplit(x[r], split = '')[[1]])))
-riskMat <- riskMat[1:50, 1:50]
+riskMat <- riskMat[1:10, 1:10]
 nm <- dim(riskMat)
 # Recursive approach
 bestFound <- list(path=matrix(c(1,1), nrow=1, dimnames = list(NULL, c('x', 'y'))),
