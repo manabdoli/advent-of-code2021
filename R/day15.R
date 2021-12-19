@@ -11,12 +11,15 @@ riskMat <- do.call(rbind,
                    lapply(1:length(x),
                           function(r)
                             as.integer(strsplit(x[r], split = '')[[1]])))
-riskMat <- riskMat[1:10, 1:10]
+#\
+#riskMat <- riskMat[1:10, 1:10]
 nm <- dim(riskMat)
 # Recursive approach
 bestFound <- list(path=matrix(c(1,1), nrow=1, dimnames = list(NULL, c('x', 'y'))),
                   maxRisk = min(sum(riskMat[1,], riskMat[,nm[2]]),
-                                sum(riskMat[,1], riskMat[nm[1],])))
+                                sum(riskMat[,1], riskMat[nm[1],]),
+                                sum(riskMat[cbind(c(1, 1:100), c(1:100, 100))])
+                                ))
 trackFound <-stackobj()
 initSearch <- riskMat*0-1
 initSearch[1,1] <- 0
@@ -41,8 +44,8 @@ cur.path <- NULL
 while(searchStack$len()>0){
   # current node
   cur_node <- searchStack$pop()
-  cat(sprintf('Solutions found %2d, Max Risk = %6d, Step: %5d at (%2d, %2d)\n',
-              numSol, bestFound$maxRisk, cur_node$cur.step, cur_node$xy[1],
+  cat(sprintf('Solutions found %2d, Cur. Risk= %4d, Max Risk = %4d, Step: %5d at (%2d, %2d)\n',
+              numSol, cur_node$cum.risk, bestFound$maxRisk, cur_node$cur.step, cur_node$xy[1],
               cur_node$xy[2]))
   curidx <- cur_node$xy
   if(cur_node$proccessed){
@@ -86,7 +89,7 @@ while(searchStack$len()>0){
         }
         for(i in 1:NROW(next.idx)){
           irsk <- cur_node$cum.risk + riskMat[next.idx[i,1], next.idx[i,2]]
-          if(irsk<=bestFound$maxRisk)
+          if(irsk+sum(nm-next.idx[i,]) <= bestFound$maxRisk)
             searchStack$push(list(xy = next.idx[i, , drop=FALSE],
                                   cur.step=cur_node$cur.step+1,
                                   cum.risk=irsk,
